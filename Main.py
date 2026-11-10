@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 import requests
 import os
-
 app = FastAPI(title="Analizador Deportivo")
 
 API_KEY = os.getenv("API_KEY")
