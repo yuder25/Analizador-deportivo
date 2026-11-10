@@ -1,5 +1,4 @@
-
-    from fastapi import FastAPI
+ from fastapi import FastAPI
 import requests
 import os
 
