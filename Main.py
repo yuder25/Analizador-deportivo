@@ -77,8 +77,22 @@ def analizar_racha(team_id, team_name):
 
 @app.get("/analizador-completo", response_class=HTMLResponse)
 def analizador_completo():
-    hoy = date.today().isoformat()
-    url = f"{BASE_URL}/fixtures?date={hoy}"
+    from datetime import datetime, timedelta
+import pytz
+
+# Hora Colombia
+colombia = pytz.timezone("America/Bogota")
+hoy = datetime.now(colombia).date().isoformat()
+manana = (datetime.now(colombia).date() + timedelta(days=1)).isoformat()
+
+# Traer hoy + mañana, 100 partidos, no 20
+def traer_partidos(fecha):
+    url = f"{BASE_URL}/fixtures?date={fecha}"
+    r = requests.get(url, headers=HEADERS)
+    return r.json().get("response", [])
+
+fixtures = traer_partidos(hoy) + traer_partidos(manana)
+fixtures = fixtures[:100]
     r = requests.get(url, headers=HEADERS, timeout=20).json()
     fixtures = r.get("response", [])[:20]  # primeros 20 para no gastar plan
 
